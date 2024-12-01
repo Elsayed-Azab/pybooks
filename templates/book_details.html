@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Book Details{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-info">
+        {% for message in messages %}
+        <p class="mb-0">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">{{ book.title }}</h2>
+            <h5 class="card-subtitle mb-2 text-muted">Author: {{ book.author }}</h5>
+            <p class="card-text"><strong>ISBN:</strong> {{ book.ISBN }}</p>
+            <p class="card-text"><strong>Publication Year:</strong> {{ book.publication_year }}</p>
+            <p class="card-text">
+                <strong>Status:</strong>
+                <span class="badge {{ 'bg-success' if book.availability_status else 'bg-danger' }}">
+                    {{ 'Available' if book.availability_status else 'Borrowed' }}
+                </span>
+            </p>
+            <form method="POST">
+                {% if book.availability_status %}
+                <button type="submit" name="action" value="borrow" class="btn btn-primary">Borrow</button>
+                {% elif is_borrower %}
+                <button type="submit" name="action" value="return" class="btn btn-warning">Return</button>
+                {% else %}
+                <button type="button" class="btn btn-secondary" disabled>Not Available</button>
+                {% endif %}
+            </form>
+            <a href="/" class="btn btn-secondary mt-3">Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

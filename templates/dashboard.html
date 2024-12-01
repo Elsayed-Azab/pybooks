@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">My Dashboard</h2>
+
+    <h4 class="card-title">Borrowed Books</h4>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-info">
+        {% for message in messages %}
+        <p class="mb-0">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% if borrowed_books %}
+    <ul class="list-group mt-3">
+        {% for book in borrowed_books %}
+        <li class="list-group-item list-group-horizontal d-flex justify-content-between align-items-center">
+            <div>
+                <strong>{{ book.title }}</strong> <br>
+                <small>Borrow Date: {{ book.borrow_date }}</small>
+            </div>
+            <form action="{{ url_for('dashboard') }}" method="POST" class="mb-0">
+                <input type="hidden" name="book_id" value="{{ book.book_id }}">
+                <button type="submit" class="btn btn-danger btn-sm">Return</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-muted mt-3">You haven't borrowed any books yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

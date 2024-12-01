@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Library Home{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-info">
+        {% for message in messages %}
+        <p class="mb-0">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="text-center">
+        <h1>Welcome to the Pybooks Library</h1>
+        <p>Search for books by title or ISBN.</p>
+        <form method="POST" class="mt-4">
+            <div class="input-group mb-3">
+                <input type="text" name="query" class="form-control" placeholder="Search books by title or ISBN"
+                    required>
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+
+    {% if books %}
+    <div class="mt-5">
+        <h2>Search Results</h2>
+        <div class="row">
+            {% for book in books %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book[1] }}</h5>
+                        <p class="card-text">Author: {{ book[6] }}</p>
+                        <p class="card-text">ISBN: {{ book[2] }}</p>
+                        <p class="card-text">
+                            <strong>Status:</strong>
+                            <span class="badge {{ 'bg-success' if book[3] else 'bg-danger' }}">
+                                {{ 'Available' if book[3] else 'Borrowed' }}
+                            </span>
+                        </p>
+                        <a href="/book/{{ book[0] }}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% elif books is not none %}
+    <p class="text-center mt-5">No books found for your query.</p>
+    {% endif %}
+</div>
+{% endblock %}

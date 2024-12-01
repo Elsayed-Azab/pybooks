@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-info">
+        {% for message in messages %}
+        <p class="mb-0">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <h2 class="text-center">Admin Dashboard</h2>
+    <a href="{{ url_for('add_book') }}" class="btn btn-primary mb-3">Add New Book</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Publication Year</th>
+                <th>Availability</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book[1] }}</td>
+                <td>{{ book[6] }}</td>
+                <td>{{ book[2] }}</td>
+                <td>{{ book[4] }}</td>
+                <td>{{ 'Available' if book[3] else 'Borrowed' }}</td>
+                <td>
+                    <a href="{{ url_for('edit_book', book_id=book[0]) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <form action="{{ url_for('delete_book', book_id=book[0]) }}" method="POST"
+                        style="display:inline-block;">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
